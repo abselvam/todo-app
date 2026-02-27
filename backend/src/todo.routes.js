@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/all", getAllTodo);
 router.post("/add", addTodo);
-router.patch("/edit", editTodo);
-router.delete("/delete", deleteTodo);
+router.patch("/edit/:id", editTodo);
+router.delete("/delete/:id", deleteTodo);
 
 export default router;
