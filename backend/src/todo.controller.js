@@ -42,6 +42,35 @@ export const addTodo = async (req, res) => {
   }
 };
 
-export const editTodo = async (req, res) => {};
+export const editTodo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, status } = req.body;
+    if (!title && !description && !status) {
+      return res.status(400).json({ message: "Pass atleast 1 field" });
+    }
+    const todo = await Todo.findById(id);
+    if (!todo) {
+      return res.status(404).json({ message: "Todo not found" });
+    }
+    const updateFields = {};
+    if (title) updateFields.title = title;
+    if (description) updateFields.description = description;
+    if (status) updateFields.status = status;
+
+    const newTodo = await Todo.findByIdAndUpdate(id, updateFields, {
+      new: true,
+    });
+
+    return res
+      .status(201)
+      .json({ message: "todo updated successfully", todo: newTodo });
+  } catch (error) {
+    console.error("Error in editTodo controller", error);
+    return res
+      .status(500)
+      .json({ message: "internal error at editTodo controller" });
+  }
+};
 
 export const deleteTodo = async (req, res) => {};
