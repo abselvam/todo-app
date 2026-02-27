@@ -7,7 +7,7 @@ import InProgress from "./pages/InProgress";
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col overflow-hidden">
+    <div className="min-h-screen flex flex-col overflow-hidden px-20">
       <Navbar />
       <Routes>
         <Route path="/" element={<All />} />
