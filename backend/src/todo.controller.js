@@ -59,7 +59,7 @@ export const editTodo = async (req, res) => {
     if (status) updateFields.status = status;
 
     const newTodo = await Todo.findByIdAndUpdate(id, updateFields, {
-      new: true,
+      returnDocument: true,
     });
 
     return res
@@ -73,4 +73,18 @@ export const editTodo = async (req, res) => {
   }
 };
 
-export const deleteTodo = async (req, res) => {};
+export const deleteTodo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const todo = await Todo.findByIdAndDelete(id);
+    if (!todo) {
+      return res.status(404).json({ message: "Todo not found" });
+    }
+    return res.status(200).json({ message: "todo is deleted successfully" });
+  } catch (error) {
+    console.error("Error in deleteTodo controller", error);
+    return res
+      .status(500)
+      .json({ message: "internal error at deleteTodo controller" });
+  }
+};
