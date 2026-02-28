@@ -1,38 +1,27 @@
-// src/components/EditTodoModal.jsx
-import { useEffect, useState } from "react";
+// src/components/AddTodoModal.jsx
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { editTodo, clearSelectedTodo } from "../store/todoSlice";
+import { addTodo } from "../store/todoSlice";
 
 function AddTodoModal({ isOpen, onClose }) {
   const dispatch = useDispatch();
-  const { selectedTodo, loading } = useSelector((state) => state.todos);
+  const { loading } = useSelector((state) => state.todos);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("Pending");
 
-  // pre-fill fields when selectedTodo changes
-  useEffect(() => {
-    if (selectedTodo) {
-      setTitle(selectedTodo.title);
-      setDescription(selectedTodo.description || "");
-      setStatus(selectedTodo.status);
-    }
-  }, [selectedTodo]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(
-      editTodo({
-        id: selectedTodo._id,
-        updateFields: { title, description, status },
-      }),
-    );
+    await dispatch(addTodo({ title, description, status }));
     handleClose();
   };
 
   const handleClose = () => {
-    dispatch(clearSelectedTodo());
+    // reset fields when closing
+    setTitle("");
+    setDescription("");
+    setStatus("Pending");
     onClose();
   };
 
@@ -57,7 +46,7 @@ function AddTodoModal({ isOpen, onClose }) {
           ✕
         </button>
 
-        <h2 className="text-2xl font-bold mb-6">Edit Todo</h2>
+        <h2 className="text-2xl font-bold mb-6">Add New Todo</h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {/* Title */}
@@ -69,6 +58,7 @@ function AddTodoModal({ isOpen, onClose }) {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              placeholder="Enter todo title..."
               className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
@@ -119,10 +109,10 @@ function AddTodoModal({ isOpen, onClose }) {
               {loading ? (
                 <>
                   <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Updating...
+                  Adding...
                 </>
               ) : (
-                "Update Todo"
+                "Add Todo"
               )}
             </button>
           </div>

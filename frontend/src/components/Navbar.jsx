@@ -1,6 +1,9 @@
 import { NavLink } from "react-router-dom";
+import AddTodoModal from "../components/AddTodoModal";
+import { useState } from "react";
 
 function Navbar() {
+  const [isAddOpen, setIsAddOpen] = useState(false);
   const tabClass = ({ isActive }) =>
     isActive
       ? "text-blue-600 font-bold border-b-2 border-blue-600"
@@ -28,11 +31,15 @@ function Navbar() {
           </div>
         </div>
         <div className="p-8 flex justify-center items-center">
-          <div className="bg-blue-700 w-40 h-14 rounded-2xl p-4 flex justify-center items-center">
+          <button
+            onClick={() => setIsAddOpen(true)}
+            className="bg-blue-700 w-40 h-14 rounded-2xl p-4 flex justify-center items-center"
+          >
             <h1 className="text-xl text-white">Add new Todo</h1>
-          </div>
+          </button>
         </div>
       </div>
+      <AddTodoModal isOpen={isAddOpen} onClose={() => setIsAddOpen(false)} />
     </>
   );
 }
