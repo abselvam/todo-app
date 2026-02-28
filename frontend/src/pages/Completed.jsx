@@ -11,6 +11,10 @@ function Completed() {
   );
 
   useEffect(() => {
+    dispatch(setPage(1));
+  }, []);
+
+  useEffect(() => {
     dispatch(
       fetchAllTodos({
         page: pagination.page,

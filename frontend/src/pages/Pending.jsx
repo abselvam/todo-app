@@ -12,6 +12,10 @@ function Pending() {
   );
 
   useEffect(() => {
+    dispatch(setPage(1)); // 👈 always reset to page 1 when entering this tab
+  }, []);
+
+  useEffect(() => {
     dispatch(
       fetchAllTodos({
         page: pagination.page,
