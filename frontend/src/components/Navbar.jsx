@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import AddTodoModal from "../components/AddTodoModal";
 import { useState } from "react";
+import { Plus } from "lucide-react";
 
 function Navbar() {
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -33,9 +34,10 @@ function Navbar() {
         <div className="p-8 flex justify-center items-center">
           <button
             onClick={() => setIsAddOpen(true)}
-            className="bg-blue-700 w-40 h-14 rounded-2xl p-4 flex justify-center items-center"
+            className="bg-blue-700 hover:cursor-pointer text-lg text-white w-50 h-14 rounded-2xl flex gap-2 justify-center items-center"
           >
-            <h1 className="text-xl text-white">Add new Todo</h1>
+            <Plus />
+            <h1>Add new Todo</h1>
           </button>
         </div>
       </div>
