@@ -8,10 +8,11 @@ const BASE_URL = "http://localhost:3000/api";
 
 export const fetchAllTodos = createAsyncThunk(
   "todos/fetchAll",
-  async ({ page, limit }, thunkAPI) => {
+  async ({ page, limit, status }, thunkAPI) => {
     try {
+      const statusQuery = status ? `&status=${status}` : ""; // 👈 only add if provided
       const res = await axios.get(
-        `${BASE_URL}/all?page=${page}&limit=${limit}`,
+        `${BASE_URL}/all?page=${page}&limit=${limit}${statusQuery}`,
       );
       console.log("API response:", res.data);
       return res.data;
@@ -114,7 +115,8 @@ const todoSlice = createSlice({
       })
       .addCase(addTodo.fulfilled, (state, action) => {
         state.loading = false;
-        state.todos.push(action.payload.todo);
+        const { _id, title, description, status } = action.payload;
+        state.todos.push({ _id, title, description, status });
       })
       .addCase(addTodo.rejected, (state, action) => {
         state.loading = false;

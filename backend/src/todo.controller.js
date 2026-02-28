@@ -5,9 +5,13 @@ export const getAllTodo = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
+    const { status } = req.query;
 
-    const total = await Todo.countDocuments();
-    const todos = await Todo.find().skip(skip).limit(limit);
+    // if status is provided, filter by it. otherwise fetch all
+    const filter = status ? { status } : {};
+
+    const total = await Todo.countDocuments(filter);
+    const todos = await Todo.find(filter).skip(skip).limit(limit);
 
     if (todos.length === 0) {
       return res.status(200).json({
