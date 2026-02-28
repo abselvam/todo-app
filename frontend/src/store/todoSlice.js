@@ -1,4 +1,3 @@
-// src/store/todoSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -10,7 +9,7 @@ export const fetchAllTodos = createAsyncThunk(
   "todos/fetchAll",
   async ({ page, limit, status }, thunkAPI) => {
     try {
-      const statusQuery = status ? `&status=${status}` : ""; // 👈 only add if provided
+      const statusQuery = status ? `&status=${status}` : "";
       const res = await axios.get(
         `${BASE_URL}/all?page=${page}&limit=${limit}${statusQuery}`,
       );
