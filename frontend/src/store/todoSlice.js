@@ -2,7 +2,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "http://localhost:3000/api";
 
 // ─── Async Thunks ───────────────────────────────────────────
 
@@ -10,9 +10,13 @@ export const fetchAllTodos = createAsyncThunk(
   "todos/fetchAll",
   async ({ page, limit }, thunkAPI) => {
     try {
-      const res = await axios.get(`${BASE_URL}?page=${page}&limit=${limit}`);
+      const res = await axios.get(
+        `${BASE_URL}/all?page=${page}&limit=${limit}`,
+      );
+      console.log("API response:", res.data);
       return res.data;
     } catch (error) {
+      console.log("API error:", error);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   },

@@ -2,16 +2,41 @@ import Todo from "./model.js";
 
 export const getAllTodo = async (req, res) => {
   try {
-    const todos = await Todo.find();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const total = await Todo.countDocuments();
+    const todos = await Todo.find().skip(skip).limit(limit);
+
     if (todos.length === 0) {
-      return res.status(200).json({ message: "There are no todos", todos: [] });
+      return res.status(200).json({
+        message: "There are no todos",
+        todos: [],
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      });
     }
-    return res.status(200).json({ message: "All todos:", todos });
+
+    return res.status(200).json({
+      message: "All todos",
+      todos,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error) {
     console.error("Error in getAllTodo controller", error);
     return res
       .status(500)
-      .json({ message: "internal error at getAllTodo controller" });
+      .json({ message: "Internal error at getAllTodo controller" });
   }
 };
 
@@ -59,7 +84,7 @@ export const editTodo = async (req, res) => {
     if (status) updateFields.status = status;
 
     const newTodo = await Todo.findByIdAndUpdate(id, updateFields, {
-      returnDocument: true,
+      new: true,
     });
 
     return res
