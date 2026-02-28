@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllTodos, setPage } from "../store/todoSlice";
 import TodoCard from "../components/TodoCard";
+import EditTodoModal from "../components/EditTodoModal";
 
 function All() {
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const dispatch = useDispatch();
   const { todos, loading, error, pagination } = useSelector(
     (state) => state.todos,
@@ -23,7 +25,11 @@ function All() {
     <div className="flex flex-col gap-3 px-20 py-6">
       {/* Todo Cards */}
       {todos.map((todo) => (
-        <TodoCard key={todo._id} todo={todo} />
+        <TodoCard
+          key={todo._id}
+          todo={todo}
+          onEditClick={() => setIsEditOpen(true)}
+        />
       ))}
 
       {/* Pagination */}
@@ -46,6 +52,7 @@ function All() {
           Next
         </button>
       </div>
+      <EditTodoModal isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} />
     </div>
   );
 }

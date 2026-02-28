@@ -26,7 +26,7 @@ export const addTodo = createAsyncThunk(
   "todos/add",
   async (todoData, thunkAPI) => {
     try {
-      const res = await axios.post(BASE_URL, todoData);
+      const res = await axios.post(`${BASE_URL}/add`, todoData);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -38,7 +38,7 @@ export const editTodo = createAsyncThunk(
   "todos/edit",
   async ({ id, updateFields }, thunkAPI) => {
     try {
-      const res = await axios.put(`${BASE_URL}/${id}`, updateFields);
+      const res = await axios.patch(`${BASE_URL}/edit/${id}`, updateFields);
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -50,7 +50,7 @@ export const deleteTodo = createAsyncThunk(
   "todos/delete",
   async (id, thunkAPI) => {
     try {
-      await axios.delete(`${BASE_URL}/${id}`);
+      await axios.delete(`${BASE_URL}/delete/${id}`);
       return id; // return id so we can remove it from state
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -69,7 +69,7 @@ const todoSlice = createSlice({
     selectedTodo: null, // for pre-filling the edit modal
     pagination: {
       page: 1,
-      limit: 10,
+      limit: 5,
       total: 0,
       totalPages: 0,
     },
