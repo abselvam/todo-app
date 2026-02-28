@@ -1,11 +1,11 @@
 // src/components/AddTodoModal.jsx
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addTodo } from "../store/todoSlice";
+import { addTodo, fetchAllTodos } from "../store/todoSlice";
 
 function AddTodoModal({ isOpen, onClose }) {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.todos);
+  const { loading, pagination } = useSelector((state) => state.todos);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -14,6 +14,7 @@ function AddTodoModal({ isOpen, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await dispatch(addTodo({ title, description, status }));
+    await dispatch(fetchAllTodos({ page: 1, limit: pagination.limit }));
     handleClose();
   };
 

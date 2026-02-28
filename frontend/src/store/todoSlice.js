@@ -115,8 +115,6 @@ const todoSlice = createSlice({
       })
       .addCase(addTodo.fulfilled, (state, action) => {
         state.loading = false;
-        const { _id, title, description, status } = action.payload;
-        state.todos.push({ _id, title, description, status });
       })
       .addCase(addTodo.rejected, (state, action) => {
         state.loading = false;

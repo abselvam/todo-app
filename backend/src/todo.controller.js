@@ -11,7 +11,10 @@ export const getAllTodo = async (req, res) => {
     const filter = status ? { status } : {};
 
     const total = await Todo.countDocuments(filter);
-    const todos = await Todo.find(filter).skip(skip).limit(limit);
+    const todos = await Todo.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
     if (todos.length === 0) {
       return res.status(200).json({
